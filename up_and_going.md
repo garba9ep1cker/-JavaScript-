@@ -426,3 +426,97 @@
 * prototype mechanism
   > behavior delegation
 
+* 状态
+  > 变量中存储值和取出值的能力
+* 作用域
+  > 存储和取出值
+  * 词法作用域
+    > 词法分析时被定义的
+  * 全局变量也自动地是全局对象的属性
+  * 动态作用域
+* JavaScript 即时编译
+  1. 词法分析 --token
+  2. 解析 token流-->AST
+  3. 代码生成 AST --> 可执行的代码
+* 三兄弟
+  * 引擎
+  * 编译器
+    * 作用域
+  * 查询
+    * LHS -- 找到变量容器
+      * 赋值的目标
+    * RHS --查询变量的值
+      * 赋值的源
+      > 赋值操作的左右边
+* 嵌套的作用域
+  ```JS
+    function foo(a) {
+      console.log(a + b);
+      b = a; // 没用`var`的变量不提升
+    }
+  ```
+
+* 欺骗词法作用域
+  * eval(stringOfCode)
+  * with(obj) {}
+
+  ```JS
+    function foo(obj) {
+      with(obj) {
+        a = 2;
+      }
+    }
+
+    var 01 = { a: 3};
+    var 02 = { b: 3};
+
+    foo(o1);
+    console.log(o1.a);
+
+    foo(o2);
+    console.log(o2.a);// undefined
+    // with将一个对象当作一个作用域并将对象的属性当作标识符，创建一个全新的词法作用域
+  ```
+
+* 函数作用域
+  * `(function foo() { .. })`作为一个表达式，foo只能在`{..}`中找到
+  * `(function foo() {})()` 第一对括号使成为表达式  第二对括号使之执行
+  * 立即被调用的函数表达式 IIFE
+* 块作用域
+
+* 利用作用域隐藏
+  * 最低权限原则
+  * 避免冲突
+  * 全局名称空间
+  * 模块管理
+* 命名与匿名
+  
+  ```JS
+    setTimeout( function() {
+      console.log("I waited 1 second!");
+    }, 1000 );
+  ```
+  * `arguments.callee`
+
+  ```JS
+    undefined = true;
+
+    (function IIFE( undefined ) {
+      var a;
+      if (a === undefined) {
+        console.log("Undefined is safe here!");
+      }
+    })()
+  ```
+
+  ```JS
+    var a = 2;
+
+    (function IIFE(def) {
+      def(window);
+    })(function def(global) {
+      var a = 3;
+      console.log(a);
+      console.log(global.a);
+    })
+  ```
